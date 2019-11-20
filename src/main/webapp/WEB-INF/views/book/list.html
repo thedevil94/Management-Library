@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List books</title>
+</head>
+<body>
+<h1>List books</h1>
+<p>
+    <a href="/create-book">Create new book</a>
+</p>
+<form action="/searchByCategory" onchange="this.submit()">
+    <a>Search By Category:</a>
+    <select name="srch">
+        <option th:each="cat:${categories}" th:text="${cat.getCategoryName()}" th:value="${cat.getId()}" th:selected="(${cat.id} == ${srch})"></option>
+    </select>
+</form>
+<p>
+    <a href="/sortByPriceAsc"><button type="submit">ASC</button></a>
+</p>
+<p>
+    <a href="/descByPriceDesc"><button type="submit">DESC</button></a>
+</p>
+
+<table border="1">
+    <tr>
+        <td>Book name</td>
+        <td>DateOfPurchase</td>
+        <td>Author</td>
+        <td>Price</td>
+        <td>Category name</td>
+        <td>Category description</td>
+        <td>Edit</td>
+        <td>Delete</td>
+    </tr>
+    <th:block th:each="book : ${books}">
+        <tr>
+            <td th:text="${book.name}"></td>
+            <td th:text="${book.dateOfPurchase}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.price}"></td>
+            <td th:text="${book.category.categoryName}"></td>
+            <td th:text="${book.category.description}"></td>
+            <td>
+                <a th:href="@{/edit-book/__${book.id}__}">Edit</a>
+            </td>
+            <td>
+                <a th:href="@{/delete-book/__${book.id}__}">Delete</a>
+            </td>
+        </tr>
+    </th:block>
+</table>
+<div th:if="srch">
+    <a th:href="@{''(page=${books.number - 1}, srch=${srch})}" th:if="${books.hasPrevious()}">Back</a>
+    <span th:text="${books.number + 1}"></span>/<span th:text="${books.totalPages}"></span>
+    <a th:href="@{''(page=${books.number + 1}, srch=${srch})}" th:if="${books.hasNext()}">Next</a>
+</div>
+<div th:if="!srch">
+    <a th:href="@{''(page=${books.number - 1})}" th:if="${books.hasPrevious()}">Back</a>
+    <span th:text="${books.number + 1}"></span>/<span th:text="${books.totalPages}"></span>
+    <a th:href="@{''(page=${books.number + 1})}" th:if="${books.hasNext()}">Next</a>
+</div>
+</body>
+</html>
