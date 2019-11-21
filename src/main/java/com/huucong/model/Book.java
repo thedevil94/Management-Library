@@ -1,6 +1,9 @@
 package com.huucong.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Table(name = "books")
@@ -8,19 +11,21 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     private String name;
-    private int dateOfPurchase;
+    private Date dateOfPurchase;
     private String author;
     private double price;
 
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
 
     public Book() {
     }
 
-    public Book(String name, int dateOfPurchase, String author, double price) {
+    public Book(String name, Date dateOfPurchase, String author, double price) {
         this.name = name;
         this.dateOfPurchase = dateOfPurchase;
         this.author = author;
@@ -43,11 +48,11 @@ public class Book {
         this.name = name;
     }
 
-    public int getDateOfPurchase() {
+    public Date getDateOfPurchase() {
         return dateOfPurchase;
     }
 
-    public void setDateOfPurchase(int dateOfPurchase) {
+    public void setDateOfPurchase(Date dateOfPurchase) {
         this.dateOfPurchase = dateOfPurchase;
     }
 

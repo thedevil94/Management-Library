@@ -1,10 +1,14 @@
 package com.huucong.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "categories")
+
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -12,7 +16,8 @@ public class Category {
     private String description;
     private String categoryName;
 
-    @OneToMany(mappedBy = "category")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private Set<Book> books;
 
     public Category() {
